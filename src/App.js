@@ -1,5 +1,19 @@
-import React from 'react';
+import React, {Component} from 'react'
+import {Button, message} from 'antd'
+/*
+应用根组件
+ */
+class App extends Component {
 
-const App = () => <div>Hello world!</div>;
+  handleClick = () => {
+    message.success('成功啦...');
+  }
 
-export default App;
+  render() {
+    return (
+      <Button type='primary' onClick={this.handleClick}>学习</Button>
+    )
+  }
+}
+
+export default App
