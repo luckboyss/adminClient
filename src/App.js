@@ -1,5 +1,10 @@
 import React, {Component} from 'react'
-import {Button, message} from 'antd'
+import { message} from 'antd'
+import { BrowserRouter, HashRouter, Switch, Route } from 'react-router-dom';
+
+import Login from './pages/login/Login';
+import Admin from './pages/admin/Admin';
+
 /*
 应用根组件
  */
@@ -11,7 +16,12 @@ class App extends Component {
 
   render() {
     return (
-      <Button type='primary' onClick={this.handleClick}>学习</Button>
+      <HashRouter>
+        <Switch>
+          <Route path='/login' component={Login} />
+          <Route path='/' component={Admin} />
+        </Switch>
+      </HashRouter>
     )
   }
 }
