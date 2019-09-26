@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
 
+import { reqLogin } from '../../api';
 import logo from './images/logo.png';
 import './login.less';
 
 class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, { username, password }) => {
+    this.props.form.validateFields(async (err, { username, password }) => {
       if (!err) {
-        alert(`发送登录的ajax请求, username=${username}, password=${password}`)
+        const result = await reqLogin(username, password);
+        if (result.status  === 0) {
+          // 登录成功
+          // 跳转到管理界面
+          this.props.history.replace('/');
+          message.success('登录成功');
+        } else {
+          // 登录失败
+          message.error(result.msg);
+        }
+        
       } else {
-        alert('验证失败');
+        message.error('验证失败');
       }
     });
   };
