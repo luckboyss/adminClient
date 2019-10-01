@@ -27,8 +27,8 @@ export default class Category extends Component {
   state = {
     categoryList: [], // 所有分类的数组
     loading: false, // 是否在请求加载中
-    actionType: 'ADD',
-    isShow: false, // 0: 不显示, 1: 显示添加, 2: 显示修改
+    actionType: 'ADD', // 对话框种类, 'ADD': 添加分类, 'Update': 修改分类
+    isShow: false, // 是否显示对话框 
   }
 
   /* 
@@ -92,7 +92,7 @@ export default class Category extends Component {
           } else {
             message.error(result.msg);
           }
-        } else if (actionType='Update'){
+        } else if (actionType==='Update'){
           // 发更新分类的请求
           const categoryId = this.category._id;
           const result = await reqUpdateCategory({categoryId, categoryName});
