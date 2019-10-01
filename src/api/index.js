@@ -36,3 +36,17 @@ export const reqWeather = (city) => {
     });
   })
 };
+
+// 获取分类列表
+export const reqCategoryList = () => ajax(BASE + '/manage/category/list');
+
+// 添加分类
+export const reqAddCategory = (categoryName) => ajax.post(BASE + '/manage/category/add', {
+  categoryName
+});
+
+// 修改分类
+export const reqUpdateCategory = ({categoryId, categoryName}) => ajax.post(BASE + '/manage/category/update', {
+  categoryId,
+  categoryName
+});

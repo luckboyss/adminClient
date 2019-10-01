@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /* 
+    1.区别call()/apply()/bind()
+    2.自定义实现bind()
+    */
+    Function.prototype.myBind = function (obj,...rest) {
+      const self = this;
+      return function (...args) {
+        self.apply(obj,[...rest,...args]);
+      }
+    }
+
+    function fn(a, b) {
+      console.log(a, b, this.m);
+    }
+     const obj = {m: 1};
+
+
+     /* 
+     函数对象: 将一个函数作为对象使用
+     实例对象: new函数调用产生的对象，简称为对象
+     */
+
+    fn.call(obj, 2, 3, 4);
+    fn.apply(obj,[2, 3, 4]);
+    fn.bind(obj)(2, 3);
+    fn.bind(obj, 5)(2, 3);
+    fn.myBind(obj)(2, 3);
+    fn.myBind(obj,5)(2, 3);
+    
+  </script>
+</body>
+</html>
