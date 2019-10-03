@@ -50,3 +50,35 @@ export const reqUpdateCategory = ({categoryId, categoryName}) => ajax.post(BASE 
   categoryId,
   categoryName
 });
+
+/* 获取商品分页列表 */
+export const reqProductList = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', {
+  params: { // 包含所有query参数的对象
+    pageNum,
+    pageSize
+  }
+});
+
+/* 根据Name/Desc搜索商品分页列表 */
+export const reqSearchProductList = ({
+  pageNum,
+  pageSize,
+  searchName,
+  searchType // 值为'productName'或者'productDesc'
+}) => ajax(BASE + '/manage/product/search', {
+  // method: 'GET',
+  params: {
+    pageNum,
+    pageSize,
+    [searchType]: searchName,
+  }
+});
+
+/* 对商品进行上架/下架处理 */
+export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', {
+  method: 'POST',
+  data: {
+    productId,
+    status
+  }
+});

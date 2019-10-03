@@ -17,6 +17,7 @@ import Pie from '../charts/Pie';
 import Order from '../order/Order';
 
 
+
 const { Footer, Sider, Content } = Layout;
 
 export default class Admin extends Component {

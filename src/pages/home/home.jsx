@@ -4,8 +4,8 @@ import './home.less';
 export default class Home extends Component {
   render() {
     return (
-      <div>
-        Home
+      <div className='home'>
+        欢迎使用北斗后台管理系统
       </div>
     )
   }
