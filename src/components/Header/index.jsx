@@ -17,10 +17,12 @@ class Header extends Component {
 
   state = {
     currentTime: new Date(),
-    dayPictureUrl: '', 
+    dayPictureUrl: '',
     weather: ''
   }
-
+  /* 
+  退出登录
+  */
   logout = () => {
     Modal.confirm({
       title: '确认退出吗？',
@@ -36,16 +38,16 @@ class Header extends Component {
     });
   }
   /* 
-  退出登录
+  根据当前请求的path得到对应的title
   */
-  getList = () => {
+  getTitle = () => {
     let title = '';
     const path = this.props.location.pathname;
     menuList.forEach(item => {
       if (item.key === path) {
         title = item.title;
       } else if (item.children) {
-        const cItem = item.children.find(cItem => cItem.key === path);
+        const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0);
         if (cItem) {
           title = cItem.title;
         }
@@ -62,7 +64,7 @@ class Header extends Component {
     const { dayPictureUrl, weather } = await reqWeather('丽水');
     // 更新状态
     this.setState({
-      dayPictureUrl, 
+      dayPictureUrl,
       weather
     });
   }
@@ -85,7 +87,7 @@ class Header extends Component {
   render() {
 
     const { currentTime, dayPictureUrl, weather } = this.state;
-    
+
     const user = memoryUtils.user;
 
     return (
@@ -96,11 +98,11 @@ class Header extends Component {
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">
-            {this.getList()}
+            {this.getTitle()}
           </div>
           <div className="header-bottom-right">
             <span>{formateDate(currentTime)}</span>
-            <img src={dayPictureUrl} alt="weather"/>
+            <img src={dayPictureUrl} alt="weather" />
             <span>{weather}</span>
           </div>
         </div>

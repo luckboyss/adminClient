@@ -12,11 +12,11 @@ const { SubMenu } = Menu;
 左侧导航
 */
 class LeftNav extends Component {
-  
+
   getMenuNodes = (menuList) => {
     // 请求的路径
     const path = this.props.location.pathname;
-    
+
     return menuList.map(item => {
       if (!item.children) {
         return (
@@ -28,7 +28,7 @@ class LeftNav extends Component {
           </Menu.Item>
         )
       }
-      if (item.children.find(citem => citem.key === path)) {
+      if (item.children.find(citem => path.indexOf(citem.key) === 0)) {
         this.openKey = item.key;
       }
       return (
@@ -59,11 +59,15 @@ class LeftNav extends Component {
   render() {
 
     // 得到当前请求的路由路径
-    const selectKey = this.props.location.pathname;
+    let selectKey = this.props.location.pathname;
+    /* 注意  /product/detail => /product */
+    if (selectKey.indexOf('/', 1) > -1) {
+      selectKey = selectKey.slice(0, selectKey.indexOf('/', 1));
+    }
     return (
       <div className='left-nav'>
         <Link to='/home' className='left-nav-link'>
-          <img src={logo} alt="logo"/>
+          <img src={logo} alt="logo" />
           <h1>硅谷后台</h1>
         </Link>
         {/* 

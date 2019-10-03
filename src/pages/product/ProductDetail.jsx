@@ -8,6 +8,8 @@ import {
 
 import LinkButton from '../../components/LinkButton';
 import memoryUtils from '../../utils/memoryUtils';
+import { BASE_IMG } from '../../utils/constants';
+import { reqCategory } from '../../api';
 
 const Item = List.Item;
 
@@ -18,7 +20,29 @@ const Item = List.Item;
 */
 export default class ProductDetail extends Component {
 
+  state = {
+    categoryName: ''
+  }
+
+  getCategory = async (categoryId) => {
+    const result = await reqCategory(categoryId);
+    if (result.status===0) {
+      this.setState({
+        categoryName: result.data.name
+      });
+    }
+  }
+
+  componentDidMount() {
+    const product = memoryUtils.product;
+    if (product._id) {
+      this.getCategory(product.categoryId);
+    }
+    
+  }
+
   render() {
+    const {categoryName } = this.state;
     const product = memoryUtils.product;
     if (!product || !product._id) {
       return <Redirect to='/product' />
@@ -49,13 +73,14 @@ export default class ProductDetail extends Component {
           </Item>
           <Item>
             <span className='detail-left'>所属分类:</span>
-            <span>抠脚大汉</span>
+            <span>{categoryName}</span>
           </Item>
           <Item>
             <span className='detail-left'>商品图片:</span>
             <span>
-              <img className='detail-img' src="http://localhost:5000/upload/image-1570009898209.jpg" alt=""/>
-              <img className='detail-img' src="http://localhost:5000/upload/image-1570009898209.jpg" alt=""/>
+              {
+                product.imgs.map(img => <img key={img} className='detail-img' src={BASE_IMG + img} alt=''/>)
+              }
             </span>
           </Item>
           <Item>

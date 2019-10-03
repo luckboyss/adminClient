@@ -51,6 +51,15 @@ export const reqUpdateCategory = ({categoryId, categoryName}) => ajax.post(BASE 
   categoryName
 });
 
+// 根据分类Id获取分类
+export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', {
+  params: {
+    categoryId
+  }
+});
+
+
+
 /* 获取商品分页列表 */
 export const reqProductList = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', {
   params: { // 包含所有query参数的对象

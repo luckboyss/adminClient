@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <button id="throttle">函数节流</button>
+  <button id="debounce">函数防抖</button>
+  <script>
+    /* 事件处理函数 */
+    function handleClick() {
+      console.log('点击事件');
+    }
+
+    /* 函数节流 */
+    /* 
+    场景: 窗口调整(resize) * 页面滚动(scroll) * DOM元素的拖拽功能实现(mousemove) * 抢购疯狂点击(mousedown)
+    */
+    function throttle(fn, delay) {
+      let last = 0;
+      return function () { // 该函数的this和接收的所有实参都交给fn()
+        console.log('throttle 事件...');
+        const now = Date.now();
+        if (now - last > delay) {
+          fn.apply(this, arguments);
+          last = now;
+        }
+      }
+    }
+    document.getElementById('throttle').onclick = throttle(handleClick, 1000);
+
+    /* 函数防抖 */
+    /* 
+    场景: 实时搜索联想(keyup) * 文本输入的验证(连续输入文字后发送AJAX请求进行验证，验证一次就好) * 判断scroll是否滑到底部，滚动事件 + 函数防抖
+    */
+    function debounce(fn, delay) {
+      
+      return function () {
+        console.log('debounce 事件...');
+        const self = this;
+        const args = arguments;
+        // 清除待执行的定时器任务
+        if (fn.timeoutId) {
+          clearTimeout(fn.timeoutId);
+        }
+        // 每隔delay的时间，启动一个新的延迟定时器，去准备调用fn
+        fn.timeoutId = setTimeout(() => {
+          fn.apply(self, args);
+          delete fn.timeoutId;
+        }, delay);
+      }
+    }
+    document.getElementById('debounce').onclick = debounce(handleClick, 1000);
+  </script>
+</body>
+</html>
