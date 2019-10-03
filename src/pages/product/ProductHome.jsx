@@ -8,6 +8,7 @@ import {
   Table,
   message,
 } from "antd";
+import throttle from 'lodash.throttle';
 
 import { reqProductList, reqSearchProductList, reqUpdateStatus } from '../../api';
 import LinkButton from '../../components/LinkButton';
@@ -61,7 +62,7 @@ export default class ProductHome extends Component {
             <span>
               <Button
                 type='primary'
-                onClick={() =>{ this.updateStatus(_id, status)}}
+                onClick={() => { this.updateStatus(_id, status) }}
               >{btnText}</Button><br />
               <span style={{
                 textAlign: 'center',
@@ -105,15 +106,15 @@ export default class ProductHome extends Component {
     this.pageNum = pageNum;
     let result;
     const { searchType, searchName } = this.state;
-    if (!searchName) {
+    if (!this.isSearch) {
       // 发送请求获取商品数据
       result = await reqProductList(pageNum, PAGE_SIZE);
     } else {
       // 发送请求获取 *搜索* 商品数据
-      result = await reqSearchProductList({pageNum, pageSize: PAGE_SIZE, searchName,searchType});
+      result = await reqSearchProductList({ pageNum, pageSize: PAGE_SIZE, searchName, searchType });
     }
-    if (result.status===0) {
-      const {total, list} = result.data;
+    if (result.status === 0) {
+      const { total, list } = result.data;
       this.setState({
         productList: list,
         total,
@@ -121,17 +122,19 @@ export default class ProductHome extends Component {
     }
   }
 
-  updateStatus = async (productId, status) => {
-    status = status===1 ? 2 : 1;
+  updateStatus = throttle(async (productId, status) => { // 函数节流
+    status = status === 1 ? 2 : 1;
     const result = await reqUpdateStatus(productId, status);
-    if (result.status===0) {
+    if (result.status === 0) {
       message.success('更新商品状态成功!')
       // 获取当前页显示
       this.getProductList(this.pageNum);
     }
-  }
+  }, 2000);
 
   handleInputChange = (e) => {
+    // 修改搜索标记
+    if (this.isSearch) this.isSearch = false;
     let searchName = e.target.value;
     this.setState({
       searchName
@@ -169,12 +172,13 @@ export default class ProductHome extends Component {
         <Button
           type='primary'
           onClick={() => {
+            this.isSearch = true; // 保存搜索的标记
             this.getProductList(1);
           }}
         >搜索</Button>
       </span>
     );
-    
+
     const extra = (
       <Button type='primary' onClick={() => {
         /* 注意 */

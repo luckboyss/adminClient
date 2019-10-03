@@ -9,7 +9,7 @@ import {
   Button
 } from 'antd';
 
-
+import PictureWall from './PictureWall';
 import { reqCategoryList } from '../../api';
 import LinkButton from '../../components/LinkButton';
 import memoryUtils from '../../utils/memoryUtils';
@@ -131,7 +131,7 @@ class ProductAddUpdate extends Component {
             )}
           </Item>
           <Item label='商品图片'>
-            <div>商品图片组件</div>
+            <PictureWall></PictureWall>
           </Item>
           <Item label='商品详情'>
             <div>商品详情组件</div>
