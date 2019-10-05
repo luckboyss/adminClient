@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import {
   Card,
   Icon,
   Form,
   Input,
   Select,
-  Button
+  Button,
+  message,
 } from 'antd';
 
+import { reqAddUpdateProduct } from '../../api';
+import RichTextEditor from './RichTextEditor';
 import PictureWall from './PictureWall';
 import { reqCategoryList } from '../../api';
 import LinkButton from '../../components/LinkButton';
@@ -25,6 +27,9 @@ class ProductAddUpdate extends Component {
     super(props);
     this.product = memoryUtils.product;
     this.isUpdate = !!this.product._id;
+    // 创建ref容器, 并保存到组件对象
+    this.pwRef = React.createRef();
+    this.editorRef = React.createRef();
     this.state = {
       categoryList: []
     }
@@ -59,12 +64,39 @@ class ProductAddUpdate extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     // 进行统一的表单验证
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(async (err, values) => {
       if (!err) {
         const { name, desc, price, categoryId } = values;
+        // 收集上传的图片文件名数组
+        const imgs = this.pwRef.current.getImgs();
+        // 输入的商品详情的标签字符串
+        const detail = this.editorRef.current.getDetail();
+
+        // 封装product对象
+        const product = {
+          categoryId,
+          name,
+          desc,
+          price,
+          detail,
+          imgs,
+        }
+        if (this.isUpdate) {
+          product._id = this.product._id;
+        }
+
+        // 发请求添加或修改
+        const result = await reqAddUpdateProduct(product);
+        if (result.status === 0) {
+          message.success(`${this.isUpdate ? '修改' : '添加'}商品成功`);
+          this.props.history.replace('/product');
+        } else {
+          message.error(result.msg);
+        }
+      } else {
+        message.error('验证失败');
       }
     })
-
   }
 
   componentDidMount() {
@@ -74,6 +106,10 @@ class ProductAddUpdate extends Component {
   render() {
     const { categoryList } = this.state;
     const { isUpdate, product } = this;
+    /* let categoryName;
+    if (isUpdate && categoryList.length > 0) {
+      categoryName = categoryList.find((c) => c._id === product.categoryId).name;
+    } */
 
     const { getFieldDecorator } = this.props.form;
 
@@ -119,7 +155,7 @@ class ProductAddUpdate extends Component {
           </Item>
           <Item label='商品分类'>
             {getFieldDecorator('categoryId', {
-              initialValue: product.categoryId || '',
+              initialValue: (categoryList.length > 0 ? product.categoryId : '') || '',
               rules: [{ required: true, message: '必须输入商品分类!' }],
             })(
               <Select>
@@ -131,10 +167,13 @@ class ProductAddUpdate extends Component {
             )}
           </Item>
           <Item label='商品图片'>
-            <PictureWall></PictureWall>
+            {/* 将容器交给需要标记的标签对象, 
+            在解析时自动将标签对象保存到容器中
+            (属性名为: currrent, 属性值为标签对象) */}
+            <PictureWall ref={this.pwRef} imgs={product.imgs} />
           </Item>
-          <Item label='商品详情'>
-            <div>商品详情组件</div>
+          <Item label='商品详情' wrapperCol={{ span: 20 }}>
+            <RichTextEditor ref={this.editorRef} detail={product.detail} />
           </Item>
           <Item>
             <Button type='primary' htmlType='submit'>提交</Button>

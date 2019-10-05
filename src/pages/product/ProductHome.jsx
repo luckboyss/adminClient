@@ -130,7 +130,7 @@ export default class ProductHome extends Component {
       // 获取当前页显示
       this.getProductList(this.pageNum);
     }
-  }, 2000);
+  }, 1000);
 
   handleInputChange = (e) => {
     // 修改搜索标记

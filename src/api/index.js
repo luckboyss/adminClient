@@ -22,14 +22,14 @@ export const reqLogin = (username, password) => (
 
 // 发送jsonp请求得到天气信息
 export const reqWeather = (city) => {
-   // 执行函数: 内部区执行异步任务,
-   // 成功了调用resolve(), 失败了不调用reject(), 直接提示错误
+  // 执行函数: 内部区执行异步任务,
+  // 成功了调用resolve(), 失败了不调用reject(), 直接提示错误
   return new Promise((resolve, reject) => {
     const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`;
     jsonp(url, {}, (error, data) => {
       if (!error && data.error === 0) {
-        const {dayPictureUrl, weather} = data.results[0].weather_data[0];
-        resolve({dayPictureUrl, weather});
+        const { dayPictureUrl, weather } = data.results[0].weather_data[0];
+        resolve({ dayPictureUrl, weather });
       } else {
         message.error('获取天气信息失败');
       }
@@ -46,7 +46,7 @@ export const reqAddCategory = (categoryName) => ajax.post(BASE + '/manage/catego
 });
 
 // 修改分类
-export const reqUpdateCategory = ({categoryId, categoryName}) => ajax.post(BASE + '/manage/category/update', {
+export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax.post(BASE + '/manage/category/update', {
   categoryId,
   categoryName
 });
@@ -91,3 +91,14 @@ export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/produ
     status
   }
 });
+
+/* 删除图片 */
+
+export const reqDeleteImg = (name) => ajax.post(BASE + '/manage/img/delete', { name });
+
+/* 添加/更新商品 */
+export const reqAddUpdateProduct = (product) => ajax.post(
+  BASE + '/manage/product/' + (product._id ? 'update' : 'add'),
+  product
+);
+
