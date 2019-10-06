@@ -106,6 +106,7 @@ export default class ProductHome extends Component {
     this.pageNum = pageNum;
     let result;
     const { searchType, searchName } = this.state;
+    this.setState({ loading: true });
     if (!this.isSearch) {
       // 发送请求获取商品数据
       result = await reqProductList(pageNum, PAGE_SIZE);
@@ -113,6 +114,7 @@ export default class ProductHome extends Component {
       // 发送请求获取 *搜索* 商品数据
       result = await reqSearchProductList({ pageNum, pageSize: PAGE_SIZE, searchName, searchType });
     }
+    this.setState({ loading: false });
     if (result.status === 0) {
       const { total, list } = result.data;
       this.setState({

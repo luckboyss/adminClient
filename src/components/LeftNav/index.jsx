@@ -68,7 +68,7 @@ class LeftNav extends Component {
       <div className='left-nav'>
         <Link to='/home' className='left-nav-link'>
           <img src={logo} alt="logo" />
-          <h1>硅谷后台</h1>
+          <h1>北斗后台</h1>
         </Link>
         {/* 
           defaultSelectedKeys: 总是根据第一次指定的key进行显示

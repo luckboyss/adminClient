@@ -82,7 +82,7 @@ export default class Category extends Component {
         
         const { categoryName } = values;
         
-        let {actionType} = this.state;
+        const {actionType} = this.state;
         if (actionType==='ADD') {
           // 发添加分类的请求
           const result = await reqAddCategory(categoryName);
