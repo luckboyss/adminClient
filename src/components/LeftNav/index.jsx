@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Menu, Icon } from 'antd';
 
+import memoryUtils from '../../utils/memoryUtils';
 import menuList from '../../config/menuConfig';
 import logo from '../../assets/images/logo.png'
 import './index.less';
@@ -13,39 +14,59 @@ const { SubMenu } = Menu;
 */
 class LeftNav extends Component {
 
+  // 判断当前用户是否有此Item对应权限
+  hasAuth = (item) => {
+    const user = memoryUtils.user;
+    const menus = user.role.menus;
+    // 1. 如果当前用户是admin
+    // 2. 如果item是公开的
+    // 3. 当前用户有此item权限
+    if (user.username==='admin' || item.public || menus.indexOf(item.key)!==-1) {
+      return true;
+    } else if (item.children) {
+      // 4. 如果当前用户有item的某个子节点的权限, 当前item也应该显示
+      return this.hasAuth(item.children);
+    }
+    return false;
+  }
+
   getMenuNodes = (menuList) => {
     // 请求的路径
     const path = this.props.location.pathname;
 
     return menuList.map(item => {
-      if (!item.children) {
+      // 判断当前用户是否有此Item对应权限
+      if (this.hasAuth(item)) {
+        if (!item.children) {
+          return (
+            <Menu.Item key={item.key}>
+              <Link to={item.key}>
+                <Icon type={item.icon} />
+                <span>{item.title}</span>
+              </Link>
+            </Menu.Item>
+          )
+        }
+        if (item.children.find(citem => path.indexOf(citem.key) === 0)) {
+          this.openKey = item.key;
+        }
         return (
-          <Menu.Item key={item.key}>
-            <Link to={item.key}>
-              <Icon type={item.icon} />
-              <span>{item.title}</span>
-            </Link>
-          </Menu.Item>
-        )
+          <SubMenu
+            key={item.key}
+            title={
+              <span>
+                <Icon type={item.icon} />
+                <span>{item.title}</span>
+              </span>
+            }
+          >
+            {
+              this.getMenuNodes(item.children)
+            }
+          </SubMenu>
+        );
       }
-      if (item.children.find(citem => path.indexOf(citem.key) === 0)) {
-        this.openKey = item.key;
-      }
-      return (
-        <SubMenu
-          key={item.key}
-          title={
-            <span>
-              <Icon type={item.icon} />
-              <span>{item.title}</span>
-            </span>
-          }
-        >
-          {
-            this.getMenuNodes(item.children)
-          }
-        </SubMenu>
-      );
+      return null;
     });
   }
   /* 

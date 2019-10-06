@@ -104,10 +104,10 @@
 
 	|参数		|是否必选 |类型     |说明
 	|_id         |Y       |string   |ID
-    |username    |N       |string   |用户名
-    |phone       |N       |string   |手机号
-    |email       |N       |string   |邮箱
-    |role_id     |N       |string   |角色ID
+  |username    |N       |string   |用户名
+  |phone       |N       |string   |手机号
+  |email       |N       |string   |邮箱
+  |role_id     |N       |string   |角色ID
 
 ### 返回示例：
 	成功:

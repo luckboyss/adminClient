@@ -132,6 +132,6 @@ export const reqDeleteUser = (userId) => ajax.post(
 
 /* 添加/更新用户 */
 export const reqAddUpdateUser = (user) => ajax.post(
-  BASE + '/manage/user/' + (user.password ? 'update' : 'add'),
+  BASE + '/manage/user/' + (user._id ? 'update' : 'add'),
   user
 );
