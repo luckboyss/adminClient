@@ -9,7 +9,7 @@ import {
 import LinkButton from '../../components/LinkButton';
 import memoryUtils from '../../utils/memoryUtils';
 import { BASE_IMG } from '../../utils/constants';
-import { reqCategory } from '../../api';
+import { reqCategory, reqProduct } from '../../api';
 
 const Item = List.Item;
 
@@ -21,32 +21,38 @@ const Item = List.Item;
 export default class ProductDetail extends Component {
 
   state = {
-    categoryName: ''
+    categoryName: '',
+    product: memoryUtils.product
   }
 
   getCategory = async (categoryId) => {
     const result = await reqCategory(categoryId);
-    if (result.status===0) {
+    if (result.status === 0) {
       this.setState({
         categoryName: result.data.name
       });
     }
   }
 
-  componentDidMount() {
-    const product = memoryUtils.product;
+  async componentDidMount() {
+    let product = this.state.product;
     if (product._id) {
       this.getCategory(product.categoryId);
+    } else { // 如果当前product状态没有数据, 根据id参数中请求获取商品并更新
+      const id = this.props.match.params.id;
+      const result = await reqProduct(id);
+      if (result.status===0) {
+        product = result.data;
+        this.setState({
+          product
+        });
+        this.getCategory(product.categoryId);
+      }
     }
-    
   }
 
   render() {
-    const {categoryName } = this.state;
-    const product = memoryUtils.product;
-    if (!product || !product._id) {
-      return <Redirect to='/product' />
-    }
+    const { categoryName, product } = this.state;
 
     const title = (
       <span>
@@ -79,13 +85,13 @@ export default class ProductDetail extends Component {
             <span className='detail-left'>商品图片:</span>
             <span>
               {
-                product.imgs.map(img => <img key={img} className='detail-img' src={BASE_IMG + img} alt=''/>)
+                product.imgs && product.imgs.map(img => <img key={img} className='detail-img' src={BASE_IMG + img} alt='' />)
               }
             </span>
           </Item>
           <Item>
             <span className='detail-left'>商品详情:</span>
-            <div dangerouslySetInnerHTML={{__html: product.detail}}></div>
+            <div dangerouslySetInnerHTML={{ __html: product.detail }}></div>
           </Item>
         </List>
       </Card>

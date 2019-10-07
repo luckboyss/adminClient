@@ -102,6 +102,14 @@ export const reqAddUpdateProduct = (product) => ajax.post(
   product
 );
 
+/* 根据商品Id获取指定商品 */
+export const reqProduct = (productId) => ajax(
+  BASE + '/manage/product/info', {
+  params: {
+    productId
+  }
+});
+
 /* 获取角色列表 */
 export const reqRoleList = () => ajax(
   BASE + '/manage/role/list'
