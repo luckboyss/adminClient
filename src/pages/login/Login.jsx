@@ -1,37 +1,18 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, message } from 'antd';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import memoryUtils from '../../utils/memoryUtils';
-import storageUtils from '../../utils/storageUtils';
-import { reqLogin } from '../../api';
+import { login } from '../../redux/actions';
 import logo from '../../assets/images/logo.png';
 import './login.less';
 
 class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields(async (err, { username, password }) => {
+    this.props.form.validateFields((err, { username, password }) => {
       if (!err) {
-        const result = await reqLogin(username, password);
-        if (result.status  === 0) {
-          // 登录成功
-          // 将user信息保存到local
-          const user = result.data;
-          // localStorage.setItem('user_key', JSON.stringify(user));
-          storageUtils.saveUser(user);
-          // 保存到内存中
-          memoryUtils.user = user;
-          // 跳转到管理界面
-          this.props.history.replace('/');
-          message.success('登录成功');
-        } else {
-          // 登录失败
-          message.error(result.msg);
-        }
-        
-      } else {
-        message.error('验证失败');
+        this.props.login(username, password);
       }
     });
   };
@@ -54,11 +35,10 @@ class Login extends Component {
   render() {
 
     // const user = JSON.parse(localStorage.getItem('user_key') || '{}');
-    const user = memoryUtils.user;
+    const { user } = this.props;
     if (user._id) {
-      return <Redirect to='/' />
+      return <Redirect to='/home' />
     }
-
     const { getFieldDecorator } = this.props.form;
 
     return (
@@ -68,6 +48,7 @@ class Login extends Component {
           <h1>后台管理系统</h1>
         </div>
         <div className="login-content">
+          {user.errorMsg ? <div style={{color: 'red',textAlign: 'center'}}>登录失败</div> : null}
           <h1>用户登录</h1>
           <Form className='login-form' onSubmit={this.handleSubmit}>
             <Form.Item>
@@ -118,4 +99,8 @@ class Login extends Component {
 }
 
 const WrappedForm = Form.create()(Login);
-export default WrappedForm;
+export default connect(
+  // ({ user }) => ({ user })
+  state => ({ user: state.user }),
+  { login }
+)(WrappedForm);

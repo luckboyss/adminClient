@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import menuList from '../../config/menuConfig';
-import memoryUtils from '../../utils/memoryUtils';
+import { logout } from '../../redux/actions';
 import storageUtils from '../../utils/storageUtils';
 import { formateDate } from '../../utils/dateUtils';
 import { reqWeather } from '../../api';
@@ -28,9 +28,8 @@ class Header extends Component {
       title: '确认退出吗？',
       onOk: () => {
         console.log('Ok');
-        storageUtils.removeUser();
-        memoryUtils.user = {};
-        this.props.history.replace('/login');
+        // storageUtils.removeUser();
+        this.props.logout();
       },
       onCancel() {
         console.log('Cancel');
@@ -40,7 +39,7 @@ class Header extends Component {
   /* 
   根据当前请求的path得到对应的title
   */
-  getTitle = () => {
+  /* getTitle = () => {
     let title = '';
     const path = this.props.location.pathname;
     menuList.forEach(item => {
@@ -54,7 +53,7 @@ class Header extends Component {
       }
     });
     return title;
-  }
+  } */
 
   /* 
   获取天气信息显示
@@ -88,7 +87,9 @@ class Header extends Component {
 
     const { currentTime, dayPictureUrl, weather } = this.state;
 
-    const user = memoryUtils.user;
+    const user = this.props.user;
+    // const title = this.getTitle();
+    const title = this.props.headerTitle;
 
     return (
       <div className='header'>
@@ -98,7 +99,7 @@ class Header extends Component {
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">
-            {this.getTitle()}
+            {title}
           </div>
           <div className="header-bottom-right">
             <span>{formateDate(currentTime)}</span>
@@ -111,4 +112,10 @@ class Header extends Component {
   }
 }
 
-export default withRouter(Header);
+export default connect(
+  state => ({
+    headerTitle: state.headerTitle,
+    user: state.user,
+  }),
+  { logout }
+)(withRouter(Header));

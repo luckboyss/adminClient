@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Redirect, Switch, Route } from 'react-router-dom';
 import { Layout } from 'antd';
+import { connect } from 'react-redux';
 
-import memoryUtils from '../../utils/memoryUtils';
 import LeftNav from '../../components/LeftNav';
 import Header from '../../components/Header';
 
@@ -20,10 +20,10 @@ import Order from '../order/Order';
 
 const { Footer, Sider, Content } = Layout;
 
-export default class Admin extends Component {
+class Admin extends Component {
   render() {
     // const user = JSON.parse(localStorage.getItem('user_key') || '{}');
-    const user = memoryUtils.user;
+    const { user } = this.props;
     if (!user._id) {
       return <Redirect to='/login' />
     }
@@ -54,3 +54,7 @@ export default class Admin extends Component {
     )
   }
 }
+export default connect(
+  state => ({ user: state.user }),
+  {}
+)(Admin);
