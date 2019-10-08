@@ -8,6 +8,7 @@
     "babel-plugin-import": "^1.12.2",
     "customize-cra": "^0.7.0",
     "draftjs-to-html": "^0.8.4",
+    "jsonp": "^0.2.1",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "react": "^16.9.0",
@@ -23,7 +24,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "test": "jest --watchAll",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
