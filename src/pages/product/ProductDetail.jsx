@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import {
   Card,
   Icon,
@@ -50,6 +49,10 @@ export default class ProductDetail extends Component {
       }
     }
   }
+
+  /* componentWillUnmount() {
+    memoryUtils.product = {};
+  } */
 
   render() {
     const { categoryName, product } = this.state;

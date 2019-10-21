@@ -103,6 +103,10 @@ class ProductAddUpdate extends Component {
     this.getCategoryList();
   }
 
+  /* componentWillUnmount() {
+    memoryUtils.product = {};
+  } */
+
   render() {
     const { categoryList } = this.state;
     const { isUpdate, product } = this;

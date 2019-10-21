@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { logout } from '../../redux/actions';
-import storageUtils from '../../utils/storageUtils';
+/* import storageUtils from '../../utils/storageUtils'; */
 import { formateDate } from '../../utils/dateUtils';
 import { reqWeather } from '../../api';
 import LinkButton from '../LinkButton';
