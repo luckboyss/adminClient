@@ -12,7 +12,7 @@ import {
 管理应用头部标题的reducer函数
 */
 
-const initHeaderTitle = '首页';
+const initHeaderTitle = '';
 
 function headerTitle(state = initHeaderTitle, action) {
   switch (action.type) {

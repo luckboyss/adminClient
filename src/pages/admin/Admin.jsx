@@ -7,6 +7,7 @@ import LeftNav from '../../components/LeftNav';
 import Header from '../../components/Header';
 
 import Home from '../home/home';
+import NotFound from '../not-found/not-found';
 import Category from '../category/Category';
 import Product from '../product/Product';
 import Role from '../role/Role';
@@ -28,14 +29,15 @@ class Admin extends Component {
       return <Redirect to='/login' />
     }
     return (
-      <Layout style={{ height: '100%'}}>
+      <Layout style={{ height: '100%' }}>
         <Sider>
           <LeftNav />
         </Sider>
         <Layout>
           <Header />
-          <Content style={{background: 'white', margin: `20px`}}>
+          <Content style={{ background: 'white', margin: `20px` }}>
             <Switch>
+              <Redirect exact from='/' to='/home' />
               <Route path='/home' component={Home} />
               <Route path='/category' component={Category} />
               <Route path='/product' component={Product} />
@@ -45,10 +47,10 @@ class Admin extends Component {
               <Route path='/charts/line' component={Line} />
               <Route path='/charts/pie' component={Pie} />
               <Route path='/order' component={Order} />
-              <Redirect to='/home' />
+              <Route component={NotFound} />
             </Switch>
           </Content>
-          <Footer style={{textAlign: 'center', color: 'rgba(0,0,0,.5)'}}>推荐使用谷歌浏览器，可以获得更加页面操作体验</Footer>
+          <Footer style={{ textAlign: 'center', color: 'rgba(0,0,0,.5)' }}>推荐使用谷歌浏览器，可以获得更加页面操作体验</Footer>
         </Layout>
       </Layout>
     )
