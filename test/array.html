@@ -6,9 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+    .trangle {
+      margin-top: 100px;
+      width: 0;
+      height: 0;
+      border-top: 100px solid red;
+      border-right: 100px solid transparent;
+      border-bottom: 100px solid transparent;
+      border-left: 100px solid transparent;
+      transform: rotate(45deg);
+    }
+    .line {
+      margin-top: 100px;
+      height: 1px;
+      background-color: green;
+      transform: scaleY(0.1);
+    }
+    .slash {
+      margin-top: 100px;
+      border-top: 1px dashed red;
+      /* background-color: red; */
+    }
+  </style>
 </head>
 
 <body>
+  <div class="trangle"></div>
+  <div class="line"></div>
+  <div class="slash"></div>
   <script>
     /* 
     1.map()
