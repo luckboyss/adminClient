@@ -12,7 +12,7 @@ import './not-found.less';
 class NotFound extends Component {
   
   goHome = () => {
-    this.props.setHeadTitle('首页');
+    this.props.setHeaderTitle('首页');
     this.props.history.replace('/home');
   }
 
